@@ -2,6 +2,7 @@
 using ImageApp.Helper;
 using ImageApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,19 +23,28 @@ namespace ImageApp.Controllers
             _logger = logger;
         }
 
+        [Route("~/")]
         public IActionResult Index()
         {
             return View();
         }
+
+        [Route("gizlilik")]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("404")]
+        public IActionResult NotFound()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
+        [Route("500")]
+        public IActionResult ServerError()
+        {
+            return View();
+        }
+
     }
 }

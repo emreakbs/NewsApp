@@ -1,12 +1,15 @@
 ﻿using ImageApp.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ImageApp.Controllers
 {
-    public class ImageController:BaseController
+    [Route("resim")]
+    public class ImageController : BaseController
     {
+        [Route("liste")]
+        public IActionResult Index()
+        {
+            return View();
+        }
     }
 }

@@ -48,7 +48,7 @@ namespace ImageApp
                     ClockSkew = TimeSpan.Zero
                 };
             });
-   
+
             services.AddSession(opts =>
             {
                 opts.IdleTimeout = TimeSpan.FromHours(4);
@@ -68,6 +68,22 @@ namespace ImageApp
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseStatusCodePages(async context =>
+            {
+                if (context.HttpContext.Response.StatusCode == 400)
+                {
+                    context.HttpContext.Response.Redirect("http://www.google.com");
+                }
+                else if (context.HttpContext.Response.StatusCode == 404)
+                {
+                    context.HttpContext.Response.Redirect($"{Environment.GetEnvironmentVariable("APP_URL")}/404");
+                }
+                else
+                {
+                    context.HttpContext.Response.Redirect($"{Environment.GetEnvironmentVariable("APP_URL")}/500");
+                }
+            });
             app.UseStaticFiles();
 
             app.UseRouting();
