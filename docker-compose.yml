@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  imageappmysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '27300:3306'
+    expose:
+      - '3306'
+    volumes:
+      - imageappmysql-volume:/var/lib/mysql
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: ImageApp
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_ROOT_USERNAME: root
+    ports:
+     - "18002:27017"
+    volumes:
+      - mongo-volume:/data/db
+volumes:
+  imageappmysql-volume:
+  mongo-volume:
