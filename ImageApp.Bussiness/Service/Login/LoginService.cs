@@ -1,4 +1,5 @@
 ﻿using ImageApp.Bussiness.Extension;
+using ImageApp.Bussiness.Service.Login;
 using ImageApp.Core.Dto;
 using ImageApp.Core.Model;
 using ImageApp.Data;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace ImageApp.Bussiness.Service
 {
 
-    public class LoginService
+    public class LoginService:ILoginService
     {
         #region Single Section
 
