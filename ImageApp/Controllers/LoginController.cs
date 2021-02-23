@@ -49,23 +49,29 @@ namespace ImageApp.Controllers
                 TempData["Error"] = "Kullanıcı bulunamadı.";
                 return RedirectToAction("Index");
             }
-
+            //cookie oluşturuyoruz
             HttpContext.Response.Cookies.Append("UserToken", JsonConvert.SerializeObject(token), new CookieOptions()
             {
                 Domain = Environment.GetEnvironmentVariable("COOKIE_DOMAIN"),
                 Expires = token.Expiration
             });
+            //session'a kullanıcı bilgilerini ekliyoruz
             HttpContext.Session.SetString("USER_INFO", JsonConvert.SerializeObject(token.UserTokenDto));
 
             return RedirectToAction("Index", "Home");
         }
+        /// <summary>
+        /// Kullanıcı oturumunu düşürmeye yarar
+        /// </summary>
+        /// <param name="id">Kullanıcı Id</param>
+        /// <returns>Page</returns>
         [HttpPost]
         public IActionResult Logout(int id)
         {
             var response = LoginService.Instance.Logout(id);
 
             if (!response) { return RedirectToAction("Index", "Home"); }
-
+            //cookie uçuruyoruz
             HttpContext.Response.Cookies.Append("UserToken", string.Empty, new CookieOptions()
             {
                 Domain = Environment.GetEnvironmentVariable("COOKIE_DOMAIN"),
@@ -73,7 +79,10 @@ namespace ImageApp.Controllers
             });
             return RedirectToAction("Index");
         }
-
+        /// <summary>
+        /// Login Sayfası
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
