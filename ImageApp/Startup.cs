@@ -5,6 +5,7 @@ using ImageApp.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +48,12 @@ namespace ImageApp
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
+   
+            services.AddSession(opts =>
+            {
+                opts.IdleTimeout = TimeSpan.FromHours(4);
+                opts.Cookie.IsEssential = false;
+            });
             services.AddControllersWithViews();
         }
 
@@ -67,6 +73,7 @@ namespace ImageApp
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseSession();
 
             app.UseAuthorization();
 

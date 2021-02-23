@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ImageApp.Bussiness.Service
 {
+
     public class LoginService
     {
         #region Single Section
@@ -77,9 +78,30 @@ namespace ImageApp.Bussiness.Service
 
             var user = uow.GetRepository<UserModel>().GetAll(x => x.Id == id).FirstOrDefault();
 
-            if (user.AccessToken != token || user.RefreshTokenEndDate < DateTime.UtcNow) return false;
+            if (user.AccessToken != token /*|| user.RefreshTokenEndDate < DateTime.UtcNow*/) return false;
 
             return true;
+        }
+        /// <summary>
+        /// Kullanıcı oturumunu sonlandırma methodu
+        /// </summary>
+        /// <param name="id">UserId</param>
+        /// <returns></returns>
+        public bool Logout(int id)
+        {
+            if (id == 0) return false;
+
+            using var uow = new UnitOfWork<MasterContext>();
+            var user = uow.GetRepository<UserModel>().GetAll(x => x.Id == id).FirstOrDefault();
+            user.RefreshToken = "";
+            user.RefreshTokenEndDate = DateTime.UtcNow;
+            user.AccessToken = "";
+
+            uow.GetRepository<UserModel>().Update(user);
+            var result = uow.SaveChanges();
+
+            return result > 0;
+
         }
 
     }

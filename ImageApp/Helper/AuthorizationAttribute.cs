@@ -2,6 +2,7 @@
 using ImageApp.Bussiness.Service;
 using ImageApp.Core.Dto;
 using ImageApp.Core.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
@@ -20,7 +21,7 @@ namespace ImageApp.Helper
             //token yoksa
             if (string.IsNullOrEmpty(token)) { RedirectForbiddenLogin(context); return; }
             //token varsa
-            else 
+            else
             {
                 var currentUser = JsonConvert.DeserializeObject<Token>(token);
 
@@ -29,6 +30,7 @@ namespace ImageApp.Helper
                 if (!tokenControl) { RedirectForbiddenLogin(context); return; }
 
                 context.HttpContext.Items.Add("USER_TOKEN", currentUser);
+                context.HttpContext.Session.SetString("USER_INFO", JsonConvert.SerializeObject(currentUser.UserTokenDto));
             }
         }
         /// <summary>

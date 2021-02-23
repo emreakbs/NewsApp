@@ -2,6 +2,7 @@
 using ImageApp.Bussiness.Service;
 using ImageApp.Core.Model;
 using ImageApp.Data.Model;
+using ImageApp.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace ImageApp.Controllers
 {
+
     public class LoginController : BaseController
     {
         /// <summary>
@@ -53,8 +55,23 @@ namespace ImageApp.Controllers
                 Domain = Environment.GetEnvironmentVariable("COOKIE_DOMAIN"),
                 Expires = token.Expiration
             });
+            HttpContext.Session.SetString("USER_INFO", JsonConvert.SerializeObject(token.UserTokenDto));
 
             return RedirectToAction("Index", "Home");
+        }
+        [HttpPost]
+        public IActionResult Logout(int id)
+        {
+            var response = LoginService.Instance.Logout(id);
+
+            if (!response) { return RedirectToAction("Index", "Home"); }
+
+            HttpContext.Response.Cookies.Append("UserToken", string.Empty, new CookieOptions()
+            {
+                Domain = Environment.GetEnvironmentVariable("COOKIE_DOMAIN"),
+                Expires = DateTimeOffset.Now.AddHours(-4)
+            });
+            return RedirectToAction("Index");
         }
 
         public IActionResult Index()
