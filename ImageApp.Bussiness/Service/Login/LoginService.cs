@@ -79,7 +79,7 @@ namespace ImageApp.Bussiness.Service
 
             var user = uow.GetRepository<UserModel>().GetAll(x => x.Id == id).FirstOrDefault();
 
-            if (user.AccessToken != token /*|| user.RefreshTokenEndDate < DateTime.UtcNow*/) return false;
+            if (user.AccessToken != token || user.RefreshTokenEndDate < DateTime.UtcNow) return false;
 
             return true;
         }
