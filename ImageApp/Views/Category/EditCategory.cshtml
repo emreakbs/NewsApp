@@ -24,7 +24,7 @@
                     <option value="0">Lüften seçiniz</option>
                     @foreach (var category in Model.CategoryList)
                     {
-                        if (Model.Category.ParentCategory == category.Id)
+                        if (Model.Category.ParentCategory == category.Id )
                         {
                             <option selected value="@category.Id">@category.CategoryName</option>
                         }
@@ -96,3 +96,20 @@
         </div>
     </form>
 </div>
+<script>
+    if ("@Model.Category.CategoryType" == "Parent") {
+        $("#parentCategory").hide();
+    }
+
+    $('input[type=radio][name=CategoryType]').change(function () {
+        if (this.value == '0') {
+            $("#inputState").val(0);
+            $("#parentCategory").hide(300);
+        }
+        else if (this.value == '1') {
+            $("#parentCategory").show(300);
+        }
+    });
+
+
+</script>

@@ -1,6 +1,7 @@
 ﻿using ImageApp.Base;
 using ImageApp.Bussiness.Dto;
 using ImageApp.Bussiness.Service.Category;
+using ImageApp.Data.Enum;
 using ImageApp.Data.Model;
 using ImageApp.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -94,9 +95,22 @@ namespace ImageApp.Controllers
         [HttpPost]
         public IActionResult EditCategory(CategoryModel categoryModel)
         {
+            //model uyum kontrolü
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Doğru kategori alanları bulunamadı.";
+                return RedirectToAction("Index");
+            }
+            //kategori ve üst kategorinin aynı seçilme durumu
+            if (categoryModel.Id == categoryModel.ParentCategory)
+            {
+                TempData["Error"] = "Üst kategori, kategori ile aynı olamaz.";
+                return RedirectToAction("Index");
+            }
+            //Alt kategori seçili ilen parent kategori seçilmeme durumu
+            if (categoryModel.CategoryType.Equals(CategoryType.Sub) && categoryModel.ParentCategory == 0)
+            {
+                TempData["Error"] = "Üst kategori seçilmedi.";
                 return RedirectToAction("Index");
             }
             var response = CategoryService.Instance.EditCategory(categoryModel, UserToken.UserTokenDto.Id);
