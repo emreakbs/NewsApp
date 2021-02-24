@@ -16,7 +16,8 @@ namespace ImageApp.Controllers
         [Route("/kategori-listele")]
         public IActionResult Index()
         {
-            return View();
+            var categoryList = CategoryService.Instance.GetCategoryList();
+            return View(categoryList);
         }
 
         [Route("kategori-ekle")]

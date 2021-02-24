@@ -1,6 +1,31 @@
-﻿@{
+﻿@model List<ImageApp.Data.Model.CategoryModel>
+
+@{
     ViewData["Title"] = "Kategori Liste";
 }
 <div class="col-xl-10 col-sm-12 mx-auto ">
     <h3 class="text-center mb-4">Kategori Liste</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Kategori Adı</th>
+                <th scope="col">Oluşturulma Tarihi</th>
+                <th scope="col">Düzenlenme Tarihi</th>
+                <th scope="col">Üst Kategorisi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <th scope="row">@category.Id</th>
+                    <td>@category.CategoryName</td>
+                    <td>@category.CreateDate</td>
+                    <td>@category.UpdateDate</td>
+                    <td>@category.ParentCategory</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
