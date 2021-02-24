@@ -8,7 +8,7 @@
     <div class="overflow-auto">
 
         <table class="table table-striped table-hover table-bordered">
-            <thead> 
+            <thead>
                 <tr>
                     <th width="50"></th>
                     <th scope="col">Kategori Adı</th>
@@ -23,7 +23,7 @@
                     <tr>
                         <td width="50">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-light"><i class="far fa-edit"></i></button>
+                                <a href="@Url.Action("EditCategory","Category",new {id=category.Id })" class="btn btn-light"><i class="far fa-edit"></i></a>
                                 <button type="button" class="btn btn-light"><i class="far fa-trash-alt"></i></button>
                             </div>
                         </td>

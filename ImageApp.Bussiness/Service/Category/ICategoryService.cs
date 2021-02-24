@@ -9,5 +9,7 @@ namespace ImageApp.Bussiness.Service.Category
     {
         List<CategoryModel> GetCategoryList();
         bool AddCategory(CategoryModel categoryModel, int userId);
+        CategoryModel GetCategory(int categoryId);
+        bool EditCategory(CategoryModel categoryModel, int userId);
     }
 }

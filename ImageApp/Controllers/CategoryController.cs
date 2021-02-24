@@ -1,4 +1,5 @@
 ﻿using ImageApp.Base;
+using ImageApp.Bussiness.Dto;
 using ImageApp.Bussiness.Service.Category;
 using ImageApp.Data.Model;
 using ImageApp.Helper;
@@ -47,5 +48,51 @@ namespace ImageApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("kategori-düzenle/{id}")]
+        public IActionResult EditCategory(int id)
+        {
+            if (id == 0)
+            {
+                TempData["Error"] = "Kategori belirlenemedi.";
+                return RedirectToAction("Index");
+            }
+
+            var category = new CategoryEditDto
+            {
+                Category = CategoryService.Instance.GetCategory(id),
+                CategoryList = CategoryService.Instance.GetCategoryList()
+            };
+
+            if (category.Category == null)
+            {
+                TempData["Error"] = "Kategori bulunamadı.";
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+        /// <summary>
+        /// Kategori düzenleme methodu
+        /// </summary>
+        /// <param name="categoryModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult EditCategory(CategoryModel categoryModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Doğru kategori alanları bulunamadı.";
+                return RedirectToAction("Index");
+            }
+            var response = CategoryService.Instance.EditCategory(categoryModel, UserToken.UserTokenDto.Id);
+
+            if (!response)
+            {
+                TempData["Error"] = "Kategori düzenlenemedi.";
+            }
+
+            TempData["Success"] = "Kategori başarı ile düzenlenmiştir.";
+            return RedirectToAction("Index");
+
+        }
     }
 }
