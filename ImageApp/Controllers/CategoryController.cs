@@ -48,7 +48,11 @@ namespace ImageApp.Controllers
                 TempData["Error"] = "Doğru kategori alanları bulunamadı.";
                 return RedirectToAction("AddCategory");
             }
-
+            if (categoryModel.CategoryType.Equals(CategoryType.Sub) && categoryModel.ParentCategory == 0)
+            {
+                TempData["Error"] = "Üst kategori seçilmedi. Üst kategori seçerek yeniden deneyiniz.";
+                return RedirectToAction("AddCategory");
+            }
             var response = CategoryService.Instance.AddCategory(categoryModel, UserToken.UserTokenDto.Id);
 
             if (!response)
