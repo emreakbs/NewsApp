@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Kategori Ekle";
+}
+<div class="col-xl-10 col-sm-12 mx-auto ">
+    <h3 class="text-center mb-4">Kategori Ekle</h3>
+    <form>
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Adı</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputEmail3" required placeholder="">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Üst Kategori</label>
+            <div class="col-sm-10">
+                <select id="inputState" class="form-control">
+                    <option selected>Lüften seçiniz</option>
+                </select>
+            </div>
+        </div>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Kategori Tipi</legend>
+                <div class="col-sm-10">
+                    <div class="row container">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                            <label class="form-check-label" for="gridRadios1">
+                                Ana Kategori
+                            </label>
+                        </div>
+                        <div class="form-check ml-2">
+                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                            <label class="form-check-label" for="gridRadios2">
+                                Alt Kategori
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group row">
+            <div class="col-sm-2">Aktif</div>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gridCheck1">
+                    <label class="form-check-label" for="gridCheck1">
+
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row ">
+            <div class="col-sm-12 mt-4">
+                <a href="@Url.Action("Index", "Category")">Listeye Geri Dön</a>
+                <button type="submit" class="btn btn-primary float-right">Kaydet</button>
+                <button type="reset" class="btn btn-light float-right mr-2">Temizle</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -23,6 +23,11 @@ namespace ImageApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<CategoryModel>().HasKey(x => x.Id);
+
+            modelBuilder.Entity<UserModel>().HasMany(h => h.Categories).WithOne(w => w.UserModel).HasForeignKey(f => f.CreateUser);
+            modelBuilder.Entity<UserModel>().HasMany(h => h.Categories).WithOne(w => w.UserModel).HasForeignKey(f => f.UpdateUser);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

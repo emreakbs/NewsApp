@@ -34,17 +34,5 @@ namespace ImageApp.Controllers
         {
             return View();
         }
-
-        [Route("404")]
-        public IActionResult NotFound()
-        {
-            return View();
-        }
-        [Route("500")]
-        public IActionResult ServerError()
-        {
-            return View();
-        }
-
     }
 }

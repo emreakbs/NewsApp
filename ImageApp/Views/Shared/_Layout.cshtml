@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,10 +9,13 @@
 </head>
 <body>
     <header>
-    @await Component.InvokeAsync("HeaderComponent")
+        @*header component*@
+        @await Component.InvokeAsync("HeaderComponent")
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class=" m-4">
+        <main role="main" class="p-3">
+            @*info component*@
+            @await Component.InvokeAsync("InfoComponent")
             @RenderBody()
         </main>
     </div>

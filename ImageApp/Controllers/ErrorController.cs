@@ -9,11 +9,16 @@ using System.Threading.Tasks;
 namespace ImageApp.Controllers
 {
     [Authorization]
-    [Route("hata")]
+
     public class ErrorController : BaseController
     {
         [Route("404")]
         public IActionResult NotFound()
+        {
+            return View();
+        }
+        [Route("500")]
+        public IActionResult ServerError()
         {
             return View();
         }

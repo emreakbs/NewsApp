@@ -22,5 +22,6 @@ namespace ImageApp.Data.Model
         public string RefreshToken { get; set; }
         public string AccessToken { get; set; }
         public DateTime? RefreshTokenEndDate { get; set; }
+        public ICollection<CategoryModel> Categories { get; set; }
     }
 }
