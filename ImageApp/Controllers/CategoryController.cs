@@ -1,4 +1,5 @@
 ﻿using ImageApp.Base;
+using ImageApp.Bussiness.Service.Category;
 using ImageApp.Data.Model;
 using ImageApp.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -17,17 +18,33 @@ namespace ImageApp.Controllers
         {
             return View();
         }
-        
+
         [Route("kategori-ekle")]
         public IActionResult AddCategory()
         {
-            return View();
+            var categoryList = CategoryService.Instance.GetCategoryList();
+            return View(categoryList);
         }
+        [HttpPost]
+        public IActionResult AddCategory(CategoryModel categoryModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Doğru kategori alanları bulunamadı.";
+                return RedirectToAction("AddCategory");
+            }
 
-        //public IActionResult AddCategory(CategoryModel categoryModel)
-        //{
-        //    if(!ModelState.IsValid) 
-        //}
+            var response = CategoryService.Instance.AddCategory(categoryModel, UserToken.UserTokenDto.Id);
+
+            if (!response)
+            {
+                TempData["Error"] = "Kategori eklenemedi.";
+                return RedirectToAction("AddCategory");
+            }
+
+            TempData["Success"] = "Kategori başarı ile eklenmiştir.";
+            return RedirectToAction("Index");
+        }
 
     }
 }
