@@ -2,16 +2,10 @@
 
 @{
     ViewData["Title"] = "Kategori Liste";
-    var deleteId = 0;
 }
+<script src="~/js/ag-grid-enterprise.min.js"></script>
 <div class="col-xl-10 col-sm-12 mx-auto ">
     <h3 class="text-center mb-4">Kategori Liste</h3>
-
-    <!-- Button trigger modal -->
-    @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-            Launch demo modal
-        </button>*@
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -32,21 +26,23 @@
             </div>
         </div>
     </div>
-    <div class="overflow-auto">
+    <!-- Modal -->
+    <div id="categoryDataTable" class="aggrid ag-theme-alpine" style="height: 40rem; width: 100%"></div>
+    @*<div class="overflow-auto">
 
-        <table class="table table-striped table-hover table-bordered">
-            <thead>
-                <tr>
-                    <th width="50"></th>
-                    <th scope="col">Kategori Adı</th>
-                    <th scope="col">Oluşturulma Tarihi</th>
-                    <th scope="col">Düzenlenme Tarihi</th>
-                    <th width="200">Üst Kategorisi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var category in Model)
-                {
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th width="50"></th>
+                        <th scope="col">Kategori Adı</th>
+                        <th scope="col">Oluşturulma Tarihi</th>
+                        <th scope="col">Düzenlenme Tarihi</th>
+                        <th width="200">Üst Kategorisi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model)
+                    {
                     <tr>
                         <td width="50">
                             <div class="btn-group" role="group" aria-label="Basic example">
@@ -59,10 +55,10 @@
                         <td>@category.UpdateDate</td>
                         <td width="200">@category.ParentCategory</td>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                    }
+                </tbody>
+            </table>
+        </div>*@
 </div>
 <script>
     function deleteModalToggle(id) {
@@ -75,4 +71,112 @@
         window.location.href=url + "/" + id;
     })
 </script>
+<script>
+        var columnDefs = [
+        {
+            headerName: "",
+            field: "id",
+            pinned: "left",
+            filter:false,
+            sortable:false,
+            maxWidth:120,
+            minWidth:110,
+            cellRenderer: (data) => {
+                return '<a href="/kategori-duzenle/' + data.value + '" class="btn btn-light"> <i class="far fa-edit"></i></a>' +
+                    '<a type="button" class="btn btn-light" onclick="deleteModalToggle(' + data.value + ')">' +
+                    '<i class="far fa-trash-alt"></i></a>';
+            }
+        },
+        {
+            headerName: "Kategori Adı",
+            field: "categoryName",
+            minWidth: 120,
+            width:220
+        },{
+            headerName: "Oluşturulma Tarihi",
+            field: "createDate",
+            minWidth: 120,
+            width:220
+        },{
+            headerName: "Düzenlenme Tarihi",
+            field: "updateDate",
+            minWidth: 120,
+            width:220
+        },
+    ];
+    var gridOptions = {
+
+        columnDefs: columnDefs,
+        defaultColDef: {
+            width: 150,
+            editable: false,
+            filter: 'agTextColumnFilter',
+            resizable: true,
+            sortable:true
+        },
+
+        // define specific column types
+        columnTypes: {
+            numberColumn: { width: 130, filter: 'agNumberColumnFilter' },
+            medalColumn: { width: 100, columnGroupShow: 'open', filter: false },
+            nonEditableColumn: { editable: false }
+        },
+        rowData: null,
+        floatingFilter: true,
+        sideBar: true,
+        pagination: true,
+        //rowGroupPanelShow: 'always',
+        statusBar: {
+            statusPanels: [
+                { statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' },
+                { statusPanel: 'agAggregationComponent' },
+            ],
+        },
+        paginationPageSize: 20,
+        enableRangeSelection: true,
+        enableCharts: true,
+        //localeText: localeText
+    };
+    /*** FILTER TABLE ***/
+    function updateSearchQuery(val) {
+        gridOptions.api.setQuickFilter(val);
+    }
+    $(".ag-grid-filter").on("keyup", function () {
+        updateSearchQuery($(this).val());
+    });
+    /*** CHANGE DATA PER PAGE ***/
+    function changePageSize(value) {
+        gridOptions.api.paginationSetPageSize(Number(value));
+    }
+    $(".sort-dropdown .dropdown-item").on("click", function () {
+        var $this = $(this);
+        changePageSize($this.text());
+        $(".filter-btn").text("1 - " + $this.text() + " of 500");
+    });
+    /*** EXPORT AS CSV BTN ***/
+    $(".ag-grid-export-btn").on("click", function () {
+        gridOptions.api.exportDataAsCsv();
+    });
+// setup the grid after the page has finished loading
+    document.addEventListener('DOMContentLoaded', function() {
+        var gridDiv = document.querySelector('#categoryDataTable');
+        new agGrid.Grid(gridDiv, gridOptions);
+
+        gridOptions.api.setRowData(@Html.Raw(Json.Serialize(Model)));
+    });
+
+     function deleteModalToggle(id) {
+        $("#deleteOnayButton").attr("name", id);
+        $("#exampleModalCenter").modal("show");
+    }
+
+    $(document).ready(function () {
+        gridOptions.api.closeToolPanel();
+        setTimeout(() => {
+            gridOptions.api.sizeColumnsToFit();
+        }, 400);
+
+    });
+</script>
+
 

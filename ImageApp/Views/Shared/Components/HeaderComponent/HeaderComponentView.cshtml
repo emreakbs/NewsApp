@@ -3,7 +3,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ImageApp</a>
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NewsApp</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -12,17 +12,13 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
-                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Resim
+                        İçerik
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" asp-area="" asp-controller="Image" asp-action="Index">Liste</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Image" asp-action="Index">İçerik Liste</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Image" asp-action="AddImage">İçerik Ekle</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -30,7 +26,7 @@
                         Kategori
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarCategoryDropdown">
-                        <a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="Index">Liste</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="Index">Ketegori Liste</a>
                         <a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="AddCategory">Kategori Ekle</a>
                     </div>
                 </li>

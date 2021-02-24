@@ -69,7 +69,7 @@ namespace ImageApp.Controllers
         /// </summary>
         /// <param name="id">kategori id</param>
         /// <returns></returns>
-        [Route("kategori-düzenle/{id}")]
+        [Route("kategori-duzenle/{id}")]
         public IActionResult EditCategory(int id)
         {
             if (id == 0)
@@ -133,7 +133,7 @@ namespace ImageApp.Controllers
         /// </summary>
         /// <param name="id">Kategori id</param>
         /// <returns></returns>
-        [HttpGet]
+        //[HttpGet("kategori-sil/{id}")]
         public IActionResult DeleteCategory(int id)
         {
             if (id == 0)

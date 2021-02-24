@@ -1,6 +1,136 @@
 ﻿@{
     ViewData["Title"] = "Resim Liste";
 }
+
+<script src="~/js/ag-grid-enterprise.min.js"></script>
+
 <div class="col-xl-10 col-sm-12 mx-auto ">
-    <h3 class="text-center mb-4">Resim Liste</h3>
+    <h3 class="text-center mb-4">İçerik Liste</h3>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Silmek istediğinize emin misiniz ?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Bu işlem sonrasında <strong> kategori</strong> ve <strong> kategoriye bağlı</strong> olan <strong>tüm içerikler silinecektir</strong>.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+                    <button type="button" id="deleteOnayButton" class="btn btn-danger ">Sil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <!-- Table -->
+    <div id="imageDataTable" class="aggrid ag-theme-alpine" style="height: 40rem; width: 100%"></div>
+    <!-- Table -->
 </div>
+<script>
+        var columnDefs = [
+        {
+            headerName: "",
+            field: "Id",
+            pinned: "left",
+            filter:false,
+            sortable:false,
+            maxWidth:120,
+            minWidth:110,
+            cellRenderer: (data) => {
+                return '<a href="/resim-sil/' + data.value + '" class="btn btn-light"> <i class="far fa-edit"></i></a>' +
+                    '<a type="button" class="btn btn-icon" onclick="deleteModalToggle(' + data.value + ')">' +
+                    '<i class="far fa-trash-alt"></i></a>';
+            }
+        },
+        {
+            headerName: "Başlık",
+            field: "Title",
+            minWidth: 120,
+            width:220
+        },
+    ];
+    var gridOptions = {
+
+        columnDefs: columnDefs,
+        defaultColDef: {
+            width: 150,
+            editable: false,
+            filter: 'agTextColumnFilter',
+            resizable: true,
+            sortable:true
+        },
+
+        // define specific column types
+        columnTypes: {
+            numberColumn: { width: 130, filter: 'agNumberColumnFilter' },
+            medalColumn: { width: 100, columnGroupShow: 'open', filter: false },
+            nonEditableColumn: { editable: false }
+        },
+        rowData: null,
+        floatingFilter: true,
+        sideBar: true,
+        pagination: true,
+        //rowGroupPanelShow: 'always',
+        statusBar: {
+            statusPanels: [
+                { statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' },
+                { statusPanel: 'agAggregationComponent' },
+            ],
+        },
+        paginationPageSize: 20,
+        enableRangeSelection: true,
+        enableCharts: true,
+        //localeText: localeText
+    };
+    /*** FILTER TABLE ***/
+    function updateSearchQuery(val) {
+        gridOptions.api.setQuickFilter(val);
+    }
+    $(".ag-grid-filter").on("keyup", function () {
+        updateSearchQuery($(this).val());
+    });
+    /*** CHANGE DATA PER PAGE ***/
+    function changePageSize(value) {
+        gridOptions.api.paginationSetPageSize(Number(value));
+    }
+    $(".sort-dropdown .dropdown-item").on("click", function () {
+        var $this = $(this);
+        changePageSize($this.text());
+        $(".filter-btn").text("1 - " + $this.text() + " of 500");
+    });
+    /*** EXPORT AS CSV BTN ***/
+    $(".ag-grid-export-btn").on("click", function () {
+        gridOptions.api.exportDataAsCsv();
+    });
+// setup the grid after the page has finished loading
+    document.addEventListener('DOMContentLoaded', function() {
+        var gridDiv = document.querySelector('#imageDataTable');
+        new agGrid.Grid(gridDiv, gridOptions);
+
+        gridOptions.api.setRowData(@Html.Raw(Json.Serialize(Model)));
+    });
+
+     function deleteModalToggle(id) {
+        $("#deleteOnayButton").attr("name", id);
+        $("#exampleModalCenter").modal("show");
+    }
+    $("#deleteOnayButton").click(function () {
+        var id=$("#deleteOnayButton").attr("name");
+        var url = '@Url.Action("DeleteImage", "Category")';
+        window.location.href=url + "/" + id;
+    })
+
+    $(document).ready(function () {
+        gridOptions.api.closeToolPanel();
+        setTimeout(() => {
+            gridOptions.api.sizeColumnsToFit();
+        }, 800);
+
+    });
+</script>
+
