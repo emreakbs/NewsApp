@@ -5,27 +5,36 @@
 }
 <div class="col-xl-10 col-sm-12 mx-auto ">
     <h3 class="text-center mb-4">Kategori Liste</h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Kategori Adı</th>
-                <th scope="col">Oluşturulma Tarihi</th>
-                <th scope="col">Düzenlenme Tarihi</th>
-                <th scope="col">Üst Kategorisi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var category in Model)
-            {
+    <div class="overflow-auto">
+
+        <table class="table table-striped table-hover table-bordered">
+            <thead> 
                 <tr>
-                    <th scope="row">@category.Id</th>
-                    <td>@category.CategoryName</td>
-                    <td>@category.CreateDate</td>
-                    <td>@category.UpdateDate</td>
-                    <td>@category.ParentCategory</td>
+                    <th width="50"></th>
+                    <th scope="col">Kategori Adı</th>
+                    <th scope="col">Oluşturulma Tarihi</th>
+                    <th scope="col">Düzenlenme Tarihi</th>
+                    <th width="200">Üst Kategorisi</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td width="50">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-light"><i class="far fa-edit"></i></button>
+                                <button type="button" class="btn btn-light"><i class="far fa-trash-alt"></i></button>
+                            </div>
+                        </td>
+                        <td>@category.CategoryName</td>
+                        <td>@category.CreateDate</td>
+                        <td>@category.UpdateDate</td>
+                        <td width="200">@category.ParentCategory</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
 </div>
