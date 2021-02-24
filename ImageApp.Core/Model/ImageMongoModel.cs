@@ -8,7 +8,7 @@ namespace ImageApp.Core.Model
     /// <summary>
     /// Resim Tablosu
     /// </summary>
-    public class ImageModel : MongoBaseModel
+    public class ImageMongoModel : MongoBaseModel
     {
 
         /// <summary>

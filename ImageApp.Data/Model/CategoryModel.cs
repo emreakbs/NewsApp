@@ -1,4 +1,5 @@
-﻿using ImageApp.Data.Enum;
+﻿using ImageApp.Core.Model;
+using ImageApp.Data.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,18 +12,15 @@ namespace ImageApp.Data.Model
     /// Katrgorileri Modeli
     /// </summary>
     [Table("Category")]
-    public class CategoryModel
+    public class CategoryModel : BaseModel
     {
-        [Key]
-        public int Id { get; set; }
         public string CategoryName { get; set; }
         public CategoryType CategoryType { get; set; }
         public int? ParentCategory { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public int CreateUser { get; set; }
-        public int UpdateUser { get; set; }
 
         public UserModel UserModel { get; set; }
+
+        public ICollection<ImageModel> Images { get; set; }
+
     }
 }
