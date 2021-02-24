@@ -20,7 +20,7 @@ namespace ImageApp.Bussiness.Service.Category
         #endregion
 
         /// <summary>
-        /// Kateori eklemeye yarar.
+        /// Kategori eklemeye servisi.
         /// </summary>
         /// <param name="categoryModel">Kategori model</param>
         /// <param name="userId">User id</param>
@@ -40,7 +40,20 @@ namespace ImageApp.Bussiness.Service.Category
         }
 
         /// <summary>
-        /// kategori düzenleme methodu
+        /// Kategori silmeye servisi
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool DeleteCategory(int id)
+        {
+            using var uow = new UnitOfWork<MasterContext>();
+            uow.GetRepository<CategoryModel>().Delete(x => x.Id == id);
+            var response = uow.SaveChanges();
+            return response > 0;
+        }
+
+        /// <summary>
+        /// kategori düzenleme servisi
         /// </summary>
         /// <param name="categoryModel"></param>
         /// <param name="userId"></param>
@@ -58,7 +71,7 @@ namespace ImageApp.Bussiness.Service.Category
         }
 
         /// <summary>
-        /// Tek olarak kategori döner
+        /// Tek olarak kategori dönen servis
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
@@ -70,7 +83,7 @@ namespace ImageApp.Bussiness.Service.Category
         }
 
         /// <summary>
-        /// Kategori listesini döner
+        /// Kategori listesini dönen servis
         /// </summary>
         /// <returns></returns>
         public List<CategoryModel> GetCategoryList()

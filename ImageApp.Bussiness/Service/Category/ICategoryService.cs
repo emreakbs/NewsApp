@@ -11,5 +11,6 @@ namespace ImageApp.Bussiness.Service.Category
         bool AddCategory(CategoryModel categoryModel, int userId);
         CategoryModel GetCategory(int categoryId);
         bool EditCategory(CategoryModel categoryModel, int userId);
+        bool DeleteCategory(int id);
     }
 }

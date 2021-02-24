@@ -14,19 +14,31 @@ namespace ImageApp.Controllers
     [Authorization]
     public class CategoryController : BaseController
     {
+        /// <summary>
+        /// kategori liste sayfasını açar
+        /// </summary>
+        /// <returns></returns>
         [Route("/kategori-listele")]
         public IActionResult Index()
         {
             var categoryList = CategoryService.Instance.GetCategoryList();
             return View(categoryList);
         }
-
+        /// <summary>
+        /// kategori ekleme sayfasını açar
+        /// </summary>
+        /// <returns></returns>
         [Route("kategori-ekle")]
         public IActionResult AddCategory()
         {
             var categoryList = CategoryService.Instance.GetCategoryList();
             return View(categoryList);
         }
+        /// <summary>
+        /// kategori ekleme methodu
+        /// </summary>
+        /// <param name="categoryModel">eklenecek kategori modeli</param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult AddCategory(CategoryModel categoryModel)
         {
@@ -47,7 +59,11 @@ namespace ImageApp.Controllers
             TempData["Success"] = "Kategori başarı ile eklenmiştir.";
             return RedirectToAction("Index");
         }
-
+        /// <summary>
+        /// kategori düzenleme sayfasını açar
+        /// </summary>
+        /// <param name="id">kategori id</param>
+        /// <returns></returns>
         [Route("kategori-düzenle/{id}")]
         public IActionResult EditCategory(int id)
         {
@@ -93,6 +109,29 @@ namespace ImageApp.Controllers
             TempData["Success"] = "Kategori başarı ile düzenlenmiştir.";
             return RedirectToAction("Index");
 
+        }
+        /// <summary>
+        /// Kategori silme methodu
+        /// </summary>
+        /// <param name="id">Kategori id</param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult DeleteCategory(int id)
+        {
+            if (id == 0)
+            {
+                TempData["Error"] = "Kategori belirlenemedi.";
+                return RedirectToAction("Index");
+            }
+            var response = CategoryService.Instance.DeleteCategory(id);
+
+            if (!response)
+            {
+                TempData["Error"] = "Kategori silinemedi.";
+            }
+
+            TempData["Success"] = "Kategori başarı ile silinmiştir.";
+            return RedirectToAction("Index");
         }
     }
 }
