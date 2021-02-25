@@ -22,6 +22,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MYSQL_URI": "server=localhost;port=27300;database=imageapp;user=root;password=root",
         "MONGO_URI": "mongodb://root:root@127.0.0.1:18002",
+        "MONGO_DB": "ImageApp",
         "MD5_KEY": "TzmEAkb**09!",
         "TOKEN_ISSUER": "localhost:18000", //Oluþturulacak token deðerini kimin daðýttýðýný ifade edeceðimizi belirtir
         "TOKEN_AUDIENCE": "localhost:18000", //Oluþturulacak token deðerini kimlerin/hangi originlerin/sitelerin kullanacaðýný belirtir

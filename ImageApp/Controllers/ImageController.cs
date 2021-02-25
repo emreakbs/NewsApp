@@ -1,5 +1,6 @@
 ﻿using ImageApp.Base;
 using ImageApp.Bussiness.Dto;
+using ImageApp.Bussiness.Service;
 using ImageApp.Bussiness.Service.Category;
 using ImageApp.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +10,13 @@ namespace ImageApp.Controllers
     [Authorization]
     public class ImageController : BaseController
     {
-        [Route("resim-liste")]
+        [Route("icerik-liste")]
         public IActionResult Index()
         {
+
             return View();
         }
-        [Route("resim-ekle")]
+        [Route("icerik-ekle")]
         public IActionResult AddImage()
         {
             var categoryList = CategoryService.Instance.GetCategoryList();
@@ -23,6 +25,7 @@ namespace ImageApp.Controllers
         [HttpPost]
         public IActionResult AddImage(ImageDto imageDto)
         {
+            ImageService.Instance.AddImage(imageDto, UserToken.UserTokenDto.Id);
             return RedirectToAction("Index");
         }
     }

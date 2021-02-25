@@ -26,7 +26,7 @@ namespace ImageApp.DataAccess.Repository.MongoRepository
         {
             CollectionName = typeof(T).Name,
             ConnectionString = Environment.GetEnvironmentVariable("MONGO_URI"),
-            DatabaseName = Environment.GetEnvironmentVariable("MONGO_DB_NAME"),
+            DatabaseName = Environment.GetEnvironmentVariable("MONGO_DB"),
         };
 
 
