@@ -1,4 +1,6 @@
 ﻿using ImageApp.Base;
+using ImageApp.Bussiness.Service;
+using ImageApp.Bussiness.Service.Home;
 using ImageApp.Helper;
 using ImageApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +28,8 @@ namespace ImageApp.Controllers
         [Route("~/")]
         public IActionResult Index()
         {
-            return View();
+            var imageDictionary = HomeService.Instance.GetImages(6);
+            return View(imageDictionary);
         }
 
         [Route("gizlilik")]

@@ -59,7 +59,7 @@ namespace ImageApp.DataAccess.Repository.EFReporistory
         /// <param name="skipCount">nereden başlasın</param>
         /// <param name="takeCount">kaç veri gelsin</param>
         /// <returns></returns>
-        IQueryable<T> GetDataPart(Expression<Func<T, bool>> where, Expression<Func<T, dynamic>> sort,
+        IQueryable<T> GetDataPart(Expression<Func<T, bool>> where1, Expression<Func<T, dynamic>> sort,
             SortTypeEnum sortType, int skipCount, int takeCount);
 
         /// <summary>

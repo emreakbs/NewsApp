@@ -91,13 +91,13 @@ namespace ImageApp.DataAccess.Repository.EFReporistory
         /// <param name="skipCount">Getirilen verilerde atlanacak veri sayısı</param>
         /// <param name="takeCount">Getirilen verilerde alınacak veri sayısı</param>
         /// <returns></returns>
-        public IQueryable<T> GetDataPart(Expression<Func<T, bool>> @where, Expression<Func<T, dynamic>> sort, SortTypeEnum sortType, int skipCount, int takeCount)
+        public IQueryable<T> GetDataPart(Expression<Func<T, bool>> where1, Expression<Func<T, dynamic>> sort, SortTypeEnum sortType, int skipCount, int takeCount)
         {
             if (sortType == SortTypeEnum.DESC)
             {
                 return _dbSet
                     .AsNoTracking()
-                    .Where(@where)
+                    .Where(where1)
                     .Skip(skipCount)
                     .Take(takeCount);
             }
@@ -105,7 +105,7 @@ namespace ImageApp.DataAccess.Repository.EFReporistory
             return _dbSet
                 .AsNoTracking()
                 .OrderBy(sort)
-                .Where(@where)
+                .Where(where1)
                 .Skip(skipCount)
                 .Take(takeCount);
         }

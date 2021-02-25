@@ -89,9 +89,21 @@ namespace ImageApp.Bussiness.Service.Category
         public List<CategoryModel> GetCategoryList()
         {
             using var uow = new UnitOfWork<MasterContext>();
-            var categoryList = uow.GetRepository<CategoryModel>().GetAll().ToList();
+            var categoryList = uow.GetRepository<CategoryModel>().GetAll().OrderByDescending(o => o.Id).ToList();
             return categoryList;
         }
+        /// <summary>
+        /// istenilen adet kadar kategori döner
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<CategoryModel> GetCategoryList(int count)
+        {
+            using var uow = new UnitOfWork<MasterContext>();
+            var categoryList = uow.GetRepository<CategoryModel>().GetAll().OrderByDescending(o => o.Id).Take(count).ToList();
+            return categoryList;
+        }
+
 
 
     }
