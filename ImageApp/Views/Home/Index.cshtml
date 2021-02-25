@@ -6,27 +6,28 @@
 
     @foreach (var item in Model)
     {
-        <h3 class="text-center">
-            @item.Key
-        </h3>
-        <div class="card-columns">
+        @if (item.Value.Count > 0)
+        {
+            <h3 class="text-center">
+                @item.Key
+            </h3>
+            <div class="card-columns">
 
-            @foreach (var image in item.Value)
-            {
-                <div class="card">
-                    <img class="card-img-top" src="@image.LargeImage" alt="@image.Title">
-                    <div class="card-body">
-                        <h5 class="card-title">@image.Title</h5>
-                        <p class="card-text">@image.Description</p>
-                        <p class="card-text"><small class="text-muted">Son güncelleme: @image.UpdateDate</small></p>
-                        <a href="@Url.Action("DetailImage","Image",new {url=image.RouteUrl })" class="btn btn-primary">Görüntüle</a>
+                @foreach (var image in item.Value)
+                {
+                    <div class="card">
+                        <img class="card-img-top" src="@image.LargeImage" alt="@image.Title">
+                        <div class="card-body">
+                            <h5 class="card-title">@image.Title</h5>
+                            <p class="card-text">@image.Description</p>
+                            <p class="card-text"><small class="text-muted">Son güncelleme: @image.UpdateDate</small></p>
+                            <a href="@Url.Action("DetailImage","Image",new {url=image.RouteUrl })" class="btn btn-primary">Görüntüle</a>
+                        </div>
                     </div>
-                </div>
-
-            }
-        </div>
+                }
+            </div>
+        }
     }
-
 </div>
 <style>
     @@media (max-width: 992px) {
@@ -34,6 +35,7 @@
             column-count: 2 !important
         }
     }
+
     @@media (max-width: 576px) {
         .card-columns {
             column-count: 1 !important

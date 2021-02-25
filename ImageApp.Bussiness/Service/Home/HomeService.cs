@@ -15,7 +15,11 @@ namespace ImageApp.Bussiness.Service.Home
         public static HomeService Instance => instance.Value;
 
         #endregion
-
+        /// <summary>
+        /// Anasayfada kategorilere göre haberleri göstermeye yarar.
+        /// </summary>
+        /// <param name="count">kaç kategori ve her kategori için kaç adet haber getirileceğini belirtir</param>
+        /// <returns>Haberler</returns>
         public Dictionary<string, List<ImageDto>> GetImages(int count)
         {
             Dictionary<string, List<ImageDto>> imageDictionary = new Dictionary<string, List<ImageDto>>();
@@ -23,7 +27,6 @@ namespace ImageApp.Bussiness.Service.Home
             foreach (var category in categoryList)
             {
                 var imageList = ImageService.Instance.GetImageList(category.Id, 1, count);
-
                 imageDictionary.Add(category.CategoryName, imageList);
             }
             return imageDictionary;
