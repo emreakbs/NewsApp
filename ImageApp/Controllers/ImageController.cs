@@ -28,5 +28,11 @@ namespace ImageApp.Controllers
             ImageService.Instance.AddImage(imageDto, UserToken.UserTokenDto.Id);
             return RedirectToAction("Index");
         }
+        [Route("icerik-goruntule/{url}")]
+        public IActionResult DetailImage(string url)
+        {
+            var category = ImageService.Instance.GetImage(url);
+            return View(category);
+        }
     }
 }

@@ -78,7 +78,18 @@ namespace ImageApp.Bussiness.Service
 
         public ImageDto GetImage(string routeUrl)
         {
-            throw new NotImplementedException();
+            using var uow = new UnitOfWork<MasterContext>();
+            var imageModel = uow.GetRepository<ImageModel>().GetAll(x => x.RouteUrl.Equals(routeUrl)).FirstOrDefault();
+            if (imageModel == null) return null;
+
+            var imageMongo = GetImageMongo(imageModel.Id);
+
+            var imageDto = ObjectMapper.Map<ImageDto>(imageModel);
+            imageDto.Content = imageMongo.Content;
+            imageDto.LargeImage = imageMongo.LargeImage;
+            imageDto.SmallImage = imageMongo.SmallImage;
+
+            return imageDto;
         }
 
         public List<ImageDto> GetImageList(int categoryId)
