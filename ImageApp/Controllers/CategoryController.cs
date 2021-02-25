@@ -133,7 +133,7 @@ namespace ImageApp.Controllers
         /// </summary>
         /// <param name="id">Kategori id</param>
         /// <returns></returns>
-        //[HttpGet("kategori-sil/{id}")]
+        [HttpGet]
         public IActionResult DeleteCategory(int id)
         {
             if (id == 0)

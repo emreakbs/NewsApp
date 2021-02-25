@@ -17,7 +17,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Bu işlem sonrasında <strong> kategori</strong> ve <strong> kategoriye bağlı</strong> olan <strong>tüm içerikler silinecektir</strong>.
+                    Bu işlem sonrasında içerik<strong>  kalıcı olarak silinecektir</strong>.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
@@ -128,7 +128,7 @@
     }
     $("#deleteOnayButton").click(function () {
         var id=$("#deleteOnayButton").attr("name");
-        var url = '@Url.Action("DeleteImage", "Category")';
+        var url = '@Url.Action("DeleteImage", "Image")';
         window.location.href=url + "/" + id;
     })
 

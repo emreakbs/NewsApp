@@ -12,5 +12,6 @@ namespace ImageApp.Bussiness.Service.Image
         ImageDto GetImage(string routeUrl);
         List<ImageDto> GetAllImage();
         List<ImageDto> GetImageList(int categoryId,int page, int count);
+        bool DeleteImage(int id);
     }
 }

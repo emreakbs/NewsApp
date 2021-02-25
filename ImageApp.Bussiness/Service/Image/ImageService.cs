@@ -43,7 +43,7 @@ namespace ImageApp.Bussiness.Service
             var mongoResult = false;
             if (efResult) mongoResult = AddImageMongo(imageDto);
 
-            return true;
+            return mongoResult;
         }
         /// <summary>
         /// Tüm içerikleri döner
@@ -102,8 +102,37 @@ namespace ImageApp.Bussiness.Service
             var imageDtoList = ImageModelListToImageDtoList(imageList);
             return imageDtoList;
         }
+        /// <summary>
+        /// İçerik silme servisi
+        /// </summary>
+        /// <param name="id">içerik id'si</param>
+        /// <returns></returns>
+        public bool DeleteImage(int id)
+        {
+            var response = 0;
+            using var uow = new UnitOfWork<MasterContext>();
+            var mongoDelete = DeleteImageMongo(id);
+            if (mongoDelete)
+            {
+                uow.GetRepository<ImageModel>().Delete(x => x.Id == id);
+                response = uow.SaveChanges();
+            }
+            return response > 0;
+        }
 
         #region Private Methods
+        /// <summary>
+        /// MongoDB'den içerik silmeye yarar
+        /// </summary>
+        /// <param name="id">içerik id</param>
+        /// <returns></returns>
+        private bool DeleteImageMongo(int id)
+        {
+            using (MongoRepository<ImageMongoModel> mongoRepository = new MongoRepository<ImageMongoModel>())
+            {
+                return mongoRepository.Delete(x => x.ParentId == id && x.DatabaseName.Equals("ImageApp") && x.TableName.Equals("Images"));
+            }
+        }
         /// <summary>
         /// Mongo'ya büyük ve küçük resmi ekler
         /// </summary>
