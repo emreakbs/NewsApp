@@ -9,7 +9,7 @@ services:
       APP_URL: "http://localhost:18000"
       ASPNETCORE_ENVIRONMENT: "Development"
       MYSQL_URI: "server=imageappmysql;port=3306;database=imageapp;user=root;password=root"
-      MONGO_URI: "mongodb://root:root@127.0.0.1:18002"
+      MONGO_URI: "mongodb://root:root@mongo:27017"
       MONGO_DB: "ImageApp"
       MD5_KEY: "TzmEAkb**09!"
       TOKEN_ISSUER: "localhost:18000"
