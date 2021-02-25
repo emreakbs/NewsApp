@@ -29,15 +29,15 @@ namespace ImageApp.Bussiness.Service
         /// <returns></returns>
         public bool AddImage(ImageDto imageDto, int userId)
         {
-
             using var uow = new UnitOfWork<MasterContext>();
             var efResult = false;
+
             var imageModel = ObjectMapper.Map<ImageModel>(imageDto);
             imageModel = BaseDatabaseOperations.Instance.SetCreateValues(imageModel, userId);
             imageModel.RouteUrl = UrlControl(uow, imageDto);
-            
+
             uow.GetRepository<ImageModel>().Add(imageModel);
-            
+
             var mongoResult = AddImageMongo(imageModel, imageDto.LargeImage, imageDto.SmallImage);
             if (mongoResult) efResult = uow.SaveChanges() > 0;
 
@@ -83,7 +83,5 @@ namespace ImageApp.Bussiness.Service
 
             return imageDto.RouteUrl;
         }
-
-
     }
 }
