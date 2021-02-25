@@ -65,7 +65,11 @@ namespace ImageApp.Bussiness.Service
         /// <returns></returns>
         public ImageDto GetImage(int id)
         {
-            throw new NotImplementedException();
+            using var uow = new UnitOfWork<MasterContext>();
+            var imageModel = uow.GetRepository<ImageModel>().GetAll(x => x.Id == id).FirstOrDefault();
+            if (imageModel == null) return null;
+            var imageDto = ImageModelMapDto(imageModel);
+            return imageDto;
         }
         /// <summary>
         /// RouteUrl'e göre tekli içerik döner
@@ -77,14 +81,7 @@ namespace ImageApp.Bussiness.Service
             using var uow = new UnitOfWork<MasterContext>();
             var imageModel = uow.GetRepository<ImageModel>().GetAll(x => x.RouteUrl.Equals(routeUrl)).FirstOrDefault();
             if (imageModel == null) return null;
-
-            var imageMongo = GetImageMongo(imageModel.Id);
-
-            var imageDto = ObjectMapper.Map<ImageDto>(imageModel);
-            imageDto.Content = imageMongo.Content;
-            imageDto.LargeImage = imageMongo.LargeImage;
-            imageDto.SmallImage = imageMongo.SmallImage;
-
+            var imageDto = ImageModelMapDto(imageModel);
             return imageDto;
         }
         /// <summary>
@@ -120,8 +117,41 @@ namespace ImageApp.Bussiness.Service
             }
             return response > 0;
         }
+        /// <summary>
+        /// içerik güncelleme servisi
+        /// </summary>
+        /// <param name="imageDto"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool EditImage(ImageDto imageDto, int userId)
+        {
+            using var uow = new UnitOfWork<MasterContext>();
 
+            var imageModel = ObjectMapper.Map<ImageModel>(imageDto);
+            imageModel = BaseDatabaseOperations.Instance.SetUpdateValues(imageModel, userId);
+
+            uow.GetRepository<ImageModel>().Update(imageModel);
+            var efResult = uow.SaveChanges() > 0;
+            var mongoResult = false;
+            if (efResult) mongoResult = EditImageMongo(imageDto);
+            return mongoResult;
+        }
         #region Private Methods
+        /// <summary>
+        /// ImageModel'i mongodan alınacakları alıp ImageDTO ya çevirir
+        /// </summary>
+        /// <param name="imageModel"></param>
+        /// <returns></returns>
+        private ImageDto ImageModelMapDto(ImageModel imageModel)
+        {
+            var imageMongo = GetImageMongo(imageModel.Id);
+            var imageDto = ObjectMapper.Map<ImageDto>(imageModel);
+            imageDto.Content = imageMongo.Content;
+            imageDto.LargeImage = imageMongo.LargeImage;
+            imageDto.SmallImage = imageMongo.SmallImage;
+
+            return imageDto;
+        }
         /// <summary>
         /// MongoDB'den içerik silmeye yarar
         /// </summary>
@@ -156,11 +186,28 @@ namespace ImageApp.Bussiness.Service
                 return mongoRepository.Add(imageMongoModel);
             }
         }
+        /// <summary>
+        /// Mongo'da resim ve content alanını günceller
+        /// </summary>
+        /// <param name="imageDto"></param>
+        /// <returns></returns>
+        private bool EditImageMongo(ImageDto imageDto)
+        {
+            using (MongoRepository<ImageMongoModel> mongoRepository = new MongoRepository<ImageMongoModel>())
+            {
+                var image = mongoRepository.GetAll(x => x.DatabaseName.Equals("ImageApp") && x.TableName.Equals("Images") && x.ParentId == imageDto.Id).FirstOrDefault();
+                image.LargeImage = imageDto.LargeImage;
+                image.SmallImage = imageDto.SmallImage;
+                image.Content = imageDto.Content;
+                return mongoRepository.Update(x => x.DatabaseName.Equals("ImageApp") && x.TableName.Equals("Images") && x.ParentId == imageDto.Id, image);
+            }
+        }
+
         private ImageMongoModel GetImageMongo(int imageId)
         {
             using (MongoRepository<ImageMongoModel> mongoRepository = new MongoRepository<ImageMongoModel>())
             {
-                return mongoRepository.GetAll(x => x.ParentId == imageId).FirstOrDefault();
+                return mongoRepository.GetAll(x => x.DatabaseName.Equals("ImageApp") && x.TableName.Equals("Images") && x.ParentId == imageId).FirstOrDefault();
             }
         }
         /// <summary>

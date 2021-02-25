@@ -38,6 +38,11 @@ namespace ImageApp.Controllers
         [HttpPost]
         public IActionResult AddImage(ImageDto imageDto)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Uygun format bulunamadı.";
+                return RedirectToAction("AddImage");
+            }
             ImageService.Instance.AddImage(imageDto, UserToken.UserTokenDto.Id);
             return RedirectToAction("Index");
         }
@@ -75,5 +80,38 @@ namespace ImageApp.Controllers
             TempData["Success"] = "İçerik başarı ile silinmiştir.";
             return RedirectToAction("Index");
         }
+        [Route("icerik-duzenle/{id}")]
+        public IActionResult EditImage(int id)
+        {
+            if (id == 0)
+            {
+                TempData["Error"] = "İçerik bulunamadı.";
+                RedirectToAction("Index");
+            }
+            var image = ImageService.Instance.GetImage(id);
+            ViewBag.CategoryList = CategoryService.Instance.GetCategoryList();
+            if (image == null)
+            {
+                TempData["Error"] = "İçerik bulunamadı.";
+                RedirectToAction("Index");
+            }
+            return View(image);
+        }
+        [HttpPost]
+        public IActionResult EditImage(ImageDto imageDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Düzenlenen içerik uygun formatta değil.";
+                return RedirectToAction("Index");
+            }
+            var response = ImageService.Instance.EditImage(imageDto, UserToken.UserTokenDto.Id);
+
+            if (response) TempData["Success"] = "İçerik başarı ile düzenlendi.";
+            else TempData["Error"] = "Beklenmeyen hata. İçerik düzenlenemedi.";
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -1,0 +1,156 @@
+﻿@model ImageApp.Bussiness.Dto.ImageDto
+
+@{
+    ViewData["Title"] = "EditImage";
+}
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+
+<div class="col-xl-10 col-sm-12 mx-auto ">
+    <h3 class="text-center mb-4">İçerik Ekle</h3>
+    <form action="/Image/EditImage" method="post">
+        <input hidden name="Id" value="@Model.Id" />
+        <input hidden name="UpdateUser" value="@Model.UpdateUser" />
+        <input hidden name="CreateUser" value="@Model.CreateUser" />
+        <input hidden name="CreateDate" value="@Model.CreateDate" />
+        <input hidden name="UpdateDate" value="@Model.UpdateDate" />
+
+
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Başlık</label>
+            <div class="col-sm-10">
+                <input type="text" name="Title" class="form-control" id="inputEmail3" required placeholder="" value="@Model.Title">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="descriptionInput" class="col-sm-2 col-form-label">Alt başlık</label>
+            <div class="col-sm-10">
+                <input type="text" name="Description" class="form-control" id="descriptionInput" placeholder="" value="@Model.Description">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="contentInput" class="col-sm-2 col-form-label">İçerik</label>
+            <div class="col-sm-10">
+                <textarea id="contentInput" required name="Content"></textarea>
+            </div>
+        </div>
+        <div id="parentCategory" class="form-group row">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Üst Kategori</label>
+            <div class="col-sm-10">
+                <select id="inputState" name="CategoryId" class="form-control">
+                    @foreach (var category in ViewBag.CategoryList)
+                    {
+                        @if (category.Id == Model.Id)
+                        {
+                            <option selected value="@category.Id">@category.CategoryName</option>
+                        }
+                        else
+                        {
+                            <option value="@category.Id">@category.CategoryName</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="seoTitleInput" class="col-sm-2 col-form-label">Seo Başlık</label>
+            <div class="col-sm-10">
+                <input type="text" name="SeoTitle" class="form-control" id="seoTitleInput" required placeholder="" value="@Model.SeoTitle">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="seoKeywordInput" class="col-sm-2 col-form-label">Seo Ahatar Kelime</label>
+            <div class="col-sm-10">
+                <input type="text" name="SeoKeyword" class="form-control" id="seoKeywordInput" required placeholder="" value="@Model.SeoKeyWord">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="routeUrlInput" class="col-sm-2 col-form-label">Gösterilecek URL</label>
+            <div class="col-sm-10">
+                <input type="text" name="RouteUrl" class="form-control" id="routeUrlInput" required placeholder="" value="@Model.RouteUrl" readonly>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="largeImgInput" class="col-sm-2 col-form-label">Büyük Resim</label>
+            <div class="col-sm-10 ">
+                <div class="d-flex">
+                    <image class="mr-2" id="largeImageThumb" width="60" height="60" src="@Model.LargeImage" />
+                    <input type="file" class="form-control-file align-self-center " accept="image/*" id="largeImgInput" placeholder="">
+                </div>
+            </div>
+            <input id="largeImageHidden" type="text" hidden name="LargeImage" value="@Model.LargeImage" />
+
+        </div>
+        <div class="form-group row">
+            <label for="smallImgInput" class="col-sm-2 col-form-label">Küçük Resim</label>
+            <div class="col-sm-10">
+                <div class="d-flex">
+                    <image class="mr-2" id="smallImageThumb" width="60" height="60" src="@Model.SmallImage" />
+                    <input type="file" class="form-control-file align-self-center" accept="image/*" id="smallImgInput" placeholder="">
+                </div>
+            </div>
+            <input id="smallImageHidden" type="text" hidden name="SmallImage" value="@Model.SmallImage" />
+        </div>
+
+        @*<div class="form-group row">
+                <div class="col-sm-2">Aktif</div>
+                <div class="col-sm-10">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="gridCheck1">
+                        <label class="form-check-label" for="gridCheck1">
+
+                        </label>
+                    </div>
+                </div>
+            </div>*@
+        <div class="form-group row ">
+            <div class="col-sm-12 mt-4">
+                <a href="@Url.Action("Index", "Image")">Listeye Geri Dön</a>
+                <button type="submit" class="btn btn-primary float-right">Kaydet</button>
+                @*<button type="reset" class="btn btn-light float-right mr-2">Temizle</button>*@
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+
+    $("#largeImgInput").change(function () {
+        imageChange(this, "largeImageThumb", "largeImageHidden")
+    });
+
+    $("#smallImgInput").change(function () {
+        imageChange(this, "smallImageThumb", "smallImageHidden")
+    });
+
+    function imageChange(that, thumbId, hiddenId) {
+        if ($(that)[0].files.length > 0) {
+            var file = $(that)[0].files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                $("#" + thumbId).attr("src", reader.result);
+                $("#" + hiddenId).attr("value", reader.result);
+            };
+        }
+    }
+
+    $('#contentInput').summernote({
+        tabsize: 2,
+        height: 320,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+    $("#contentInput").summernote('pasteHTML', '@Html.Raw(Model.Content)');
+    //$('#contentInput').summernote('code', );
+</script>

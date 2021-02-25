@@ -199,7 +199,7 @@ namespace ImageApp.DataAccess.Repository.MongoRepository
         {
             try
             {
-                CurrentCollection.ReplaceOneAsync(predicate, entity);
+                CurrentCollection.ReplaceOne(predicate, entity);
                 return true;
             }
             catch (Exception ex)
