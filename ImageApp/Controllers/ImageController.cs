@@ -13,7 +13,7 @@ namespace ImageApp.Controllers
         [Route("icerik-liste")]
         public IActionResult Index()
         {
-            var imageDtoList = ImageService.Instance.GetAllImage(false);
+            var imageDtoList = ImageService.Instance.GetAllImage();
             return View(imageDtoList);
         }
         [Route("icerik-ekle")]

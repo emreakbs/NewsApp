@@ -38,38 +38,35 @@ namespace ImageApp.Bussiness.Service
 
             uow.GetRepository<ImageModel>().Add(imageModel);
             var efResult = uow.SaveChanges() > 0;
-
+            imageDto.Id = imageModel.Id;
             var mongoResult = false;
-            if (efResult) mongoResult = AddImageMongo(imageModel, imageDto.LargeImage, imageDto.SmallImage);
+            if (efResult) mongoResult = AddImageMongo(imageDto);
 
             return true;
         }
-
-        public List<ImageDto> GetAllImage(bool imageShow)
+        /// <summary>
+        /// Tüm içerikleri döner
+        /// </summary>
+        /// <param name="imageShow"></param>
+        /// <returns></returns>
+        public List<ImageDto> GetAllImage()
         {
             List<ImageDto> imageDtoList = new List<ImageDto>();
 
             using var uow = new UnitOfWork<MasterContext>();
             var imageList = uow.GetRepository<ImageModel>().GetAll().ToList();
-            if (imageShow)
+
+            foreach (var image in imageList)
             {
-                foreach (var image in imageList)
+                var imageDto = ObjectMapper.Map<ImageDto>(image);
+                var imageMongo = GetImageMongo(imageDto.Id);
+                if (imageMongo != null)
                 {
-                    var imageDto = ObjectMapper.Map<ImageDto>(image);
-                    var imageMongo = GetImageMongo(imageDto.Id);
-                    if (imageMongo != null)
-                    {
-
-                        imageDto.LargeImage = imageMongo.LargeImage;
-                        imageDto.SmallImage = imageMongo.SmallImage;
-                    }
-
-                    imageDtoList.Add(imageDto);
+                    imageDto.LargeImage = imageMongo.LargeImage;
+                    imageDto.SmallImage = imageMongo.SmallImage;
+                    imageDto.Content = imageMongo.Content;
                 }
-            }
-            else
-            {
-                imageDtoList.AddRange(from image in imageList select ObjectMapper.Map<ImageDto>(image));
+                imageDtoList.Add(imageDto);
             }
             return imageDtoList;
         }
@@ -92,24 +89,21 @@ namespace ImageApp.Bussiness.Service
         /// <summary>
         /// Mongo'ya büyük ve küçük resmi ekler
         /// </summary>
-        /// <param name="imageModel">içerik modeli</param>
+        /// <param name="imageDto">içerik modeli</param>
         /// <param name="largeImage">Büyk resim</param>
         /// <param name="smallImage">Küçk resim</param>
-        private bool AddImageMongo(ImageModel imageModel, string largeImage, string smallImage)
+        private bool AddImageMongo(ImageDto imageDto)
         {
             using (MongoRepository<ImageMongoModel> mongoRepository = new MongoRepository<ImageMongoModel>())
             {
                 var imageMongoModel = new ImageMongoModel
                 {
-                    CreateDate = imageModel.CreateDate,
-                    CreateUserId = imageModel.CreateUser,
-                    UpdateDate = imageModel.UpdateDate,
-                    UpdateUserId = imageModel.UpdateUser,
                     DatabaseName = "ImageApp",
-                    ParentId = imageModel.Id,
-                    LargeImage = largeImage,
-                    SmallImage = smallImage,
-                    TableName = "Images"
+                    TableName = "Images",
+                    ParentId = imageDto.Id,
+                    Content = imageDto.Content,
+                    LargeImage = imageDto.LargeImage,
+                    SmallImage = imageDto.SmallImage
                 };
                 return mongoRepository.Add(imageMongoModel);
             }
@@ -122,16 +116,25 @@ namespace ImageApp.Bussiness.Service
             }
         }
         /// <summary>
-        /// url'in daha önceden eklenip eklenmediğini kontrol eder
+        /// url'in daha önceden eklenip eklenmediğini recursive olarak kontrol eder
         /// </summary>
         /// <param name="uow">UnitOfWork</param>
         /// <param name="imageDto">İçerik</param>
         /// <returns>Kullanılabilecek URL</returns>
-        private string UrlControl(UnitOfWork<MasterContext> uow, ImageDto imageDto)
+        private string UrlControl(UnitOfWork<MasterContext> uow, ImageDto imageDto, int count = 0)
         {
-            var urlCount = uow.GetRepository<ImageModel>().Count(x => x.RouteUrl.Equals(imageDto.RouteUrl));
-            if (urlCount > 0)
-                imageDto.RouteUrl = $"{imageDto.RouteUrl}-{urlCount+1}";
+            if (count == 0)
+            {
+                var urlCount = uow.GetRepository<ImageModel>().Count(x => x.RouteUrl.Equals(imageDto.RouteUrl));
+                if (urlCount > 0) UrlControl(uow, imageDto, 1);
+            }
+            else
+            {
+                var controlString = $"{imageDto.RouteUrl}-{count++}";
+                var urlCount = uow.GetRepository<ImageModel>().Count(x => x.RouteUrl.Equals(controlString));
+                if (urlCount > 0) UrlControl(uow, imageDto, count);
+                else imageDto.RouteUrl = controlString;
+            }
 
             return imageDto.RouteUrl;
         }

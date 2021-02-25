@@ -37,24 +37,12 @@ namespace ImageApp.Core.Model
         [BsonElement]
         public string LargeImage { get; set; }
         /// <summary>
+        /// İçerik
+        /// </summary>
+        [BsonElement]
+        public string Content { get; set; }
+        /// <summary>
         /// Oluşturulma tarihi
         /// </summary>
-        [BsonElement]
-        public DateTime CreateDate { get; set; }
-        /// <summary>
-        /// Düzenlenme tarihi
-        /// </summary>
-        [BsonElement]
-        public DateTime UpdateDate { get; set; }
-        /// <summary>
-        /// Düzenleyen kullanıcı
-        /// </summary>
-        [BsonElement]
-        public int UpdateUserId { get; set; }
-        /// <summary>
-        /// oluşturan kullanıcı
-        /// </summary>
-        [BsonElement]
-        public int CreateUserId { get; set; }
     }
 }

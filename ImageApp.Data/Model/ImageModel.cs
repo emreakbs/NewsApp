@@ -19,10 +19,6 @@ namespace ImageApp.Data.Model
         /// </summary>
         public string Description { get; set; }
         /// <summary>
-        /// İçerik
-        /// </summary>
-        public string Content { get; set; }
-        /// <summary>
         /// Seo Başlık
         /// </summary>
         public string SeoTitle { get; set; }

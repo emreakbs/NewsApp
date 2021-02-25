@@ -10,7 +10,7 @@ namespace ImageApp.Bussiness.Service.Image
         bool AddImage(ImageDto imageDto, int userId);
         ImageDto GetImage(int id);
         ImageDto GetImage(string routeUrl);
-        List<ImageDto> GetAllImage(bool imageshow);
+        List<ImageDto> GetAllImage();
         List<ImageDto> GetImageList(int categoryId);
     }
 }

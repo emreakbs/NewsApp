@@ -9,5 +9,7 @@ namespace ImageApp.Bussiness.Dto
     {
         public string LargeImage { get; set; }
         public string SmallImage { get; set; }
+        public string Content { get; set; }
+
     }
 }
