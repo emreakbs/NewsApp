@@ -92,6 +92,7 @@ namespace ImageApp.Bussiness.Service.Category
             var categoryList = uow.GetRepository<CategoryModel>().GetAll().OrderByDescending(o => o.Id).ToList();
             return categoryList;
         }
+
         /// <summary>
         /// istenilen adet kadar kategori döner
         /// </summary>

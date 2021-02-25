@@ -24,6 +24,7 @@ namespace ImageApp.Bussiness.Service
         public static ImageService Instance => instance.Value;
 
         #endregion
+
         /// <summary>
         /// Haber eklemeye yarar
         /// </summary>
@@ -98,7 +99,7 @@ namespace ImageApp.Bussiness.Service
             var skipCount = page == 1 ? 0 : page * count - count;
             var takeCount = page * count;
             using var uow = new UnitOfWork<MasterContext>();
-            var imageList = uow.GetRepository<ImageModel>().GetDataPart(y => y.CategoryId == categoryId, y => y.CategoryId == categoryId, SortTypeEnum.ASC, skipCount, takeCount).ToList();
+            var imageList = uow.GetRepository<ImageModel>().GetDataPart(y => y.CategoryId == categoryId, y => y.CategoryId == categoryId, SortTypeEnum.DESC, skipCount, takeCount).ToList();
             var imageDtoList = ImageModelListToImageDtoList(imageList);
             return imageDtoList;
         }
