@@ -9,6 +9,7 @@ using ImageApp.DataAccess.Repository.MongoRepository;
 using ImageApp.DataAccess.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ImageApp.Bussiness.Service
@@ -30,19 +31,64 @@ namespace ImageApp.Bussiness.Service
         public bool AddImage(ImageDto imageDto, int userId)
         {
             using var uow = new UnitOfWork<MasterContext>();
-            var efResult = false;
 
             var imageModel = ObjectMapper.Map<ImageModel>(imageDto);
             imageModel = BaseDatabaseOperations.Instance.SetCreateValues(imageModel, userId);
             imageModel.RouteUrl = UrlControl(uow, imageDto);
 
             uow.GetRepository<ImageModel>().Add(imageModel);
+            var efResult = uow.SaveChanges() > 0;
 
-            var mongoResult = AddImageMongo(imageModel, imageDto.LargeImage, imageDto.SmallImage);
-            if (mongoResult) efResult = uow.SaveChanges() > 0;
+            var mongoResult = false;
+            if (efResult) mongoResult = AddImageMongo(imageModel, imageDto.LargeImage, imageDto.SmallImage);
 
             return true;
         }
+
+        public List<ImageDto> GetAllImage(bool imageShow)
+        {
+            List<ImageDto> imageDtoList = new List<ImageDto>();
+
+            using var uow = new UnitOfWork<MasterContext>();
+            var imageList = uow.GetRepository<ImageModel>().GetAll().ToList();
+            if (imageShow)
+            {
+                foreach (var image in imageList)
+                {
+                    var imageDto = ObjectMapper.Map<ImageDto>(image);
+                    var imageMongo = GetImageMongo(imageDto.Id);
+                    if (imageMongo != null)
+                    {
+
+                        imageDto.LargeImage = imageMongo.LargeImage;
+                        imageDto.SmallImage = imageMongo.SmallImage;
+                    }
+
+                    imageDtoList.Add(imageDto);
+                }
+            }
+            else
+            {
+                imageDtoList.AddRange(from image in imageList select ObjectMapper.Map<ImageDto>(image));
+            }
+            return imageDtoList;
+        }
+
+        public ImageDto GetImage(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ImageDto GetImage(string routeUrl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ImageDto> GetImageList(int categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Mongo'ya büyük ve küçük resmi ekler
         /// </summary>
@@ -68,7 +114,13 @@ namespace ImageApp.Bussiness.Service
                 return mongoRepository.Add(imageMongoModel);
             }
         }
-
+        private ImageMongoModel GetImageMongo(int imageId)
+        {
+            using (MongoRepository<ImageMongoModel> mongoRepository = new MongoRepository<ImageMongoModel>())
+            {
+                return mongoRepository.GetAll(x => x.ParentId == imageId).FirstOrDefault();
+            }
+        }
         /// <summary>
         /// url'in daha önceden eklenip eklenmediğini kontrol eder
         /// </summary>
@@ -79,9 +131,10 @@ namespace ImageApp.Bussiness.Service
         {
             var urlCount = uow.GetRepository<ImageModel>().Count(x => x.RouteUrl.Equals(imageDto.RouteUrl));
             if (urlCount > 0)
-                imageDto.RouteUrl = $"{imageDto.RouteUrl}-{urlCount}";
+                imageDto.RouteUrl = $"{imageDto.RouteUrl}-{urlCount+1}";
 
             return imageDto.RouteUrl;
         }
+
     }
 }
