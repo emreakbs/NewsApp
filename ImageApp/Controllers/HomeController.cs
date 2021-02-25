@@ -28,7 +28,7 @@ namespace ImageApp.Controllers
         [Route("~/")]
         public IActionResult Index()
         {
-            var imageDictionary = HomeService.Instance.GetImages(6);
+            var imageDictionary = HomeService.Instance.GetImages(2, 10);
             return View(imageDictionary);
         }
 

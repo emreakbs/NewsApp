@@ -20,13 +20,13 @@ namespace ImageApp.Bussiness.Service.Home
         /// </summary>
         /// <param name="count">kaç kategori ve her kategori için kaç adet haber getirileceğini belirtir</param>
         /// <returns>Haberler</returns>
-        public Dictionary<string, List<ImageDto>> GetImages(int count)
+        public Dictionary<string, List<ImageDto>> GetImages(int categoryCount, int imageCount)
         {
             Dictionary<string, List<ImageDto>> imageDictionary = new Dictionary<string, List<ImageDto>>();
-            var categoryList = CategoryService.Instance.GetCategoryList(count);
+            var categoryList = CategoryService.Instance.GetCategoryList(categoryCount);
             foreach (var category in categoryList)
             {
-                var imageList = ImageService.Instance.GetImageList(category.Id, 1, count);
+                var imageList = ImageService.Instance.GetImageList(category.Id, 1, imageCount);
                 imageDictionary.Add(category.CategoryName, imageList);
             }
             return imageDictionary;

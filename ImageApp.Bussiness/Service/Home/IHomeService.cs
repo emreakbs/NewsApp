@@ -7,6 +7,6 @@ namespace ImageApp.Bussiness.Service.Home
 {
     public interface IHomeService
     {
-        Dictionary<string, List<ImageDto>> GetImages(int count);
+        Dictionary<string, List<ImageDto>> GetImages(int categoryCount,int imageCount);
     }
 }
