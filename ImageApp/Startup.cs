@@ -54,7 +54,7 @@ namespace ImageApp
                 opts.IdleTimeout = TimeSpan.FromHours(4);
                 opts.Cookie.IsEssential = false;
             });
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +68,7 @@ namespace ImageApp
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            //Hata sayfalarï¿½
             app.UseStatusCodePages(async context =>
             {
                 if (context.HttpContext.Response.StatusCode == 400)
@@ -93,14 +93,14 @@ namespace ImageApp
 
             app.UseAuthorization();
 
-            //Migration varsa ve database güncel deðilse database'i günceller
+            //Migration varsa ve database gï¿½ncel deï¿½ilse database'i gï¿½nceller
             using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
             {
                 MasterContext context = serviceScope.ServiceProvider.GetRequiredService<MasterContext>();
                 context.Database.Migrate();
             }
 
-            //Database de kullanýcý var mý onu ontrol ediyoruz
+            //Database de kullanï¿½cï¿½ var mï¿½ onu ontrol ediyoruz
             DatabaseInit.Instance.UserControl();
 
             app.UseEndpoints(endpoints =>

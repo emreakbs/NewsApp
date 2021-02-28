@@ -136,6 +136,7 @@ namespace ImageApp.Bussiness.Service
             if (efResult) mongoResult = EditImageMongo(imageDto);
             return mongoResult;
         }
+
         #region Private Methods
         /// <summary>
         /// ImageModel'i mongodan alınacakları alıp ImageDTO ya çevirir
@@ -202,7 +203,6 @@ namespace ImageApp.Bussiness.Service
                 return mongoRepository.Update(x => x.DatabaseName.Equals("ImageApp") && x.TableName.Equals("Images") && x.ParentId == imageDto.Id, image);
             }
         }
-
         private ImageMongoModel GetImageMongo(int imageId)
         {
             using (MongoRepository<ImageMongoModel> mongoRepository = new MongoRepository<ImageMongoModel>())
