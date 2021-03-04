@@ -21,12 +21,12 @@
         "APP_URL": "http://localhost:18000",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MYSQL_URI": "server=localhost;port=27300;database=imageapp;user=root;password=root",
-        "MONGO_URI": "mongodb://root:root@127.0.0.1:18002",
+        "REDIS_URI": "127.0.0.1:6379",
         "MONGO_DB": "ImageApp",
         "MD5_KEY": "TzmEAkb**09!",
-        "TOKEN_ISSUER": "localhost:18000", //Oluþturulacak token deðerini kimin daðýttýðýný ifade edeceðimizi belirtir
-        "TOKEN_AUDIENCE": "localhost:18000", //Oluþturulacak token deðerini kimlerin/hangi originlerin/sitelerin kullanacaðýný belirtir
-        "TOKEN_SECURITY_KEY": "ImageApp**@9922!" //güvenlik anahtarýmýz
+        "TOKEN_ISSUER": "localhost:18000", //Oluï¿½turulacak token deï¿½erini kimin daï¿½ï¿½ttï¿½ï¿½ï¿½nï¿½ ifade edeceï¿½imizi belirtir
+        "TOKEN_AUDIENCE": "localhost:18000", //Oluï¿½turulacak token deï¿½erini kimlerin/hangi originlerin/sitelerin kullanacaï¿½ï¿½nï¿½ belirtir
+        "TOKEN_SECURITY_KEY": "ImageApp**@9922!" //gï¿½venlik anahtarï¿½mï¿½z
       },
       "applicationUrl": "http://localhost:18000"
     }

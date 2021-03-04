@@ -1,6 +1,4 @@
 using ImageApp.Bussiness.Extension;
-using ImageApp.Core.Interface;
-using ImageApp.Core.Model;
 using ImageApp.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -10,13 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageApp
 {
@@ -54,6 +48,10 @@ namespace ImageApp
                 opts.IdleTimeout = TimeSpan.FromHours(4);
                 opts.Cookie.IsEssential = false;
             });
+            services.AddStackExchangeRedisCache(action =>
+           {
+               action.Configuration = Environment.GetEnvironmentVariable("REDIS_URL");
+           });
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 

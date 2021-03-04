@@ -1,4 +1,5 @@
-﻿using ImageApp.Data;
+﻿using ImageApp.Bussiness.Helper;
+using ImageApp.Data;
 using ImageApp.Data.Model;
 using ImageApp.DataAccess.UnitOfWork;
 using System;
@@ -27,11 +28,7 @@ namespace ImageApp.Bussiness.Service.Category
         /// <returns>Boolean</returns>
         public bool AddCategory(CategoryModel categoryModel, int userId)
         {
-            categoryModel.CreateUser = userId;
-            categoryModel.UpdateUser = userId;
-            categoryModel.CreateDate = DateTime.UtcNow;
-            categoryModel.UpdateDate = DateTime.UtcNow;
-
+            categoryModel = BaseDatabaseOperations.Instance.SetCreateValues(categoryModel, userId);
             using var uow = new UnitOfWork<MasterContext>();
             uow.GetRepository<CategoryModel>().Add(categoryModel);
             var result = uow.SaveChanges();
@@ -60,8 +57,7 @@ namespace ImageApp.Bussiness.Service.Category
         /// <returns></returns>
         public bool EditCategory(CategoryModel categoryModel, int userId)
         {
-            categoryModel.UpdateUser = userId;
-            categoryModel.UpdateDate = DateTime.UtcNow;
+            categoryModel = BaseDatabaseOperations.Instance.SetUpdateValues(categoryModel, userId);
 
             using var uow = new UnitOfWork<MasterContext>();
             uow.GetRepository<CategoryModel>().Update(categoryModel);

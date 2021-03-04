@@ -9,6 +9,7 @@ services:
       APP_URL: "http://localhost:18000"
       ASPNETCORE_ENVIRONMENT: "Development"
       MYSQL_URI: "server=imageappmysql;port=3306;database=imageapp;user=root;password=root"
+      REDIS_URI: "redis:6379"
       MONGO_URI: "mongodb://root:root@mongo:27017"
       MONGO_DB: "ImageApp"
       MD5_KEY: "TzmEAkb**09!"
@@ -40,6 +41,16 @@ services:
      - "18002:27017"
     volumes:
       - mongo-volume:/data/db
+  redis:
+    image: redis
+    container_name: imageapp_redis
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-volume:/data
 volumes:
   imageappmysql-volume:
   mongo-volume:
+  redis-volume:
