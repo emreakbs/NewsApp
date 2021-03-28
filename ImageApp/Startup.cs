@@ -43,15 +43,18 @@ namespace ImageApp
                 };
             });
 
-            services.AddSession(opts =>
+            services.AddDistributedMemoryCache();
+           // services.AddStackExchangeRedisCache(action =>
+           //{
+           //    action.Configuration = Environment.GetEnvironmentVariable("REDIS_URL");
+           //});
+
+            services.AddSession(options =>
             {
-                opts.IdleTimeout = TimeSpan.FromHours(4);
-                opts.Cookie.IsEssential = false;
+                options.IdleTimeout = TimeSpan.FromHours(4);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
-            services.AddStackExchangeRedisCache(action =>
-           {
-               action.Configuration = Environment.GetEnvironmentVariable("REDIS_URL");
-           });
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 

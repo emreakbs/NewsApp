@@ -40,7 +40,6 @@ namespace ImageApp.Helper
         private void RedirectForbiddenLogin(AuthorizationFilterContext context)
         {
             string applicationUrl = Environment.GetEnvironmentVariable("APP_URL");
-            //string applicationUrl = "http://localhost:18000";
             context.Result = new RedirectResult($"{applicationUrl}/Login/Index");
         }
 
