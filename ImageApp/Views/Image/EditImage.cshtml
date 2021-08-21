@@ -117,6 +117,8 @@
     </form>
 </div>
 <script>
+    const range = $.summernote.range;  // range utility
+    const rng = range.create();
 
     $("#largeImgInput").change(function () {
         imageChange(this, "largeImageThumb", "largeImageHidden")
@@ -151,6 +153,8 @@
             ['view', ['fullscreen', 'codeview', 'help']]
         ]
     });
+    //const nodes = rng.pasteHTML(`<div>summernote</div>`)
+    //$('#contentInput').summernote('editor.setLastRange', range.createFromNodeAfter(node).select());
     $("#contentInput").summernote('code', '');
-    $("#contentInput").summernote('pasteHTML', '@Html.Raw(Model.Content)');
+    $("#contentInput").summernote('pasteHTML', "@Html.Raw(Model.Content.Replace("\"","'"))");
 </script>
