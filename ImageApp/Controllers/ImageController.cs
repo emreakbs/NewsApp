@@ -51,7 +51,7 @@ namespace ImageApp.Controllers
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        [Route("icerik-goruntule/{url}")]
+        [Route("icerik/{url}")]
         public IActionResult DetailImage(string url)
         {
             var category = ImageService.Instance.GetImage(url);
