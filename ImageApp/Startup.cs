@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace ImageApp
@@ -44,10 +45,10 @@ namespace ImageApp
             });
 
             services.AddDistributedMemoryCache();
-           // services.AddStackExchangeRedisCache(action =>
-           //{
-           //    action.Configuration = Environment.GetEnvironmentVariable("REDIS_URL");
-           //});
+            // services.AddStackExchangeRedisCache(action =>
+            //{
+            //    action.Configuration = Environment.GetEnvironmentVariable("REDIS_URL");
+            //});
 
             services.AddSession(options =>
             {
@@ -72,18 +73,13 @@ namespace ImageApp
             //Hata sayfalar�
             app.UseStatusCodePages(async context =>
             {
-                if (context.HttpContext.Response.StatusCode == 400)
+                context.HttpContext.Request.Path = context.HttpContext.Response.StatusCode switch
                 {
-                    context.HttpContext.Response.Redirect("http://www.google.com");
-                }
-                else if (context.HttpContext.Response.StatusCode == 404)
-                {
-                    context.HttpContext.Response.Redirect($"{Environment.GetEnvironmentVariable("APP_URL")}/404");
-                }
-                else
-                {
-                    context.HttpContext.Response.Redirect($"{Environment.GetEnvironmentVariable("APP_URL")}/500");
-                }
+                    400 => "http://www.google.com",
+                    404 => "/404",
+                    _ => "/500",
+                };
+                await context.Next(context.HttpContext);
             });
             app.UseStaticFiles();
 
